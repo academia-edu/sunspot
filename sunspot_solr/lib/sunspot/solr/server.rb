@@ -30,7 +30,7 @@ module Sunspot
 
       #
       # Bootstrap a new solr_home by creating all required
-      # directories. 
+      # directories.
       #
       # ==== Returns
       #
@@ -150,9 +150,11 @@ module Sunspot
         File.expand_path(@pid_dir || FileUtils.pwd)
       end
 
-      def solr_data_dir
-        File.expand_path(@solr_data_dir || Dir.tmpdir)
-      end
+      # Do not set the data dir as it conflicts with multicore datadir.
+
+      # def solr_data_dir
+      #   File.expand_path(@solr_data_dir || Dir.tmpdir)
+      # end
 
       def solr_home
         File.expand_path(@solr_home || File.join(File.dirname(solr_jar), 'solr'))
@@ -180,7 +182,7 @@ module Sunspot
         end
       end
 
-      # 
+      #
       # Create new solr_home, config, log and pid directories
       #
       # ==== Returns

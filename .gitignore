@@ -1,4 +1,5 @@
 *.gem
+.DS_Store
 Gemfile.lock
 vendor/bundle
 sunspot/vendor/bundle
@@ -7,5 +8,7 @@ sunspot_rails/spec/rails3/vendor
 **/*/vendor/bundle
 sunspot-solr.pid
 .yardoc
+*.sublime-project
+*.sublime-workspace
 docs
 *.swp
