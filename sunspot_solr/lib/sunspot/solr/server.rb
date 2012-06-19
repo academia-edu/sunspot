@@ -190,7 +190,9 @@ module Sunspot
       # Boolean:: success
       #
       def create_solr_directories
-        [solr_data_dir, pid_dir].each do |path|
+        # Do not create new solr_data_dir, this is multicore.
+        # [solr_data_dir, pid_dir].each do |path|
+        [pid_dir].each do |path|
           FileUtils.mkdir_p(path) unless File.exists?(path)
         end
       end
