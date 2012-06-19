@@ -21,7 +21,7 @@ module Sunspot
       LOG_LEVELS = Set['SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST']
 
       attr_accessor :min_memory, :max_memory, :bind_address, :port, :solr_data_dir, :solr_home, :log_file
-      attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar
+      attr_writer :pid_dir, :pid_file, :log_level, :solr_data_dir, :solr_home, :solr_jar, :multicore
 
       def initialize(*args)
         ensure_java_installed
@@ -151,10 +151,9 @@ module Sunspot
       end
 
       # Do not set the data dir as it conflicts with multicore datadir.
-
-      # def solr_data_dir
-      #   File.expand_path(@solr_data_dir || Dir.tmpdir)
-      # end
+      def solr_data_dir
+        File.expand_path(@solr_data_dir || Dir.tmpdir) if is_multicore?
+      end
 
       def solr_home
         File.expand_path(@solr_home || File.join(File.dirname(solr_jar), 'solr'))
@@ -162,6 +161,10 @@ module Sunspot
 
       def solr_jar
         @solr_jar || SOLR_START_JAR
+      end
+
+      def is_multicore?
+        @multicore
       end
 
       #
@@ -191,8 +194,8 @@ module Sunspot
       #
       def create_solr_directories
         # Do not create new solr_data_dir, this is multicore.
-        # [solr_data_dir, pid_dir].each do |path|
-        [pid_dir].each do |path|
+        dirs = is_multicore? ? [pid_dir] : [solr_data_dir, pid_dir]
+        dirs.each do |path|
           FileUtils.mkdir_p(path) unless File.exists?(path)
         end
       end
