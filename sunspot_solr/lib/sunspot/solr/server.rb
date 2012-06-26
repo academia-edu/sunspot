@@ -152,7 +152,7 @@ module Sunspot
 
       # Do not set the data dir as it conflicts with multicore datadir.
       def solr_data_dir
-        File.expand_path(@solr_data_dir || Dir.tmpdir) if is_multicore?
+        File.expand_path(@solr_data_dir || Dir.tmpdir) unless is_multicore?
       end
 
       def solr_home
